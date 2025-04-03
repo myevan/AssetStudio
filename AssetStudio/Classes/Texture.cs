@@ -9,6 +9,13 @@ namespace AssetStudio
     {
         protected Texture(ObjectReader reader) : base(reader)
         {
+            if (version[0] >= 6000) // BUGFIX: Unity 6 Texture2D Preview
+            {
+                var m_UnknownType = reader.ReadInt32();
+                reader.AlignStream();
+                return;
+            }
+
             if (version[0] > 2017 || (version[0] == 2017 && version[1] >= 3)) //2017.3 and up
             {
                 var m_ForcedFallbackFormat = reader.ReadInt32();
